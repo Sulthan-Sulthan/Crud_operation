@@ -5,6 +5,7 @@ import uuid from 'react-uuid';
 import { useState, useEffect } from 'react';
 import { editEmployee } from './../service/localstorage';
 
+
 export const EmployeeForm = () => {
     const navigate = useNavigate();
     const { id } = useParams();
@@ -23,22 +24,34 @@ export const EmployeeForm = () => {
         }
     }, [id]);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        id ? editEmployee(id, inputValues) : addEmployee({ id: uuid(), ...inputValues });
-        resetForm();
-        setshowAlert(true);
-        setTimeout(() => {
-            setshowAlert(false);
-        }, 2000);
-    };
+     const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Check if any of the required fields (name, email, address, phone) are empty
+    if (!inputValues.name || !inputValues.email || !inputValues.address || !inputValues.phone) {
+        // Display an alert to inform the user that all fields are required
+        alert("All fields are Required");
+        return; // Don't proceed with submission if fields are not filled
+    }
+
+    id ? editEmployee(id, inputValues) : addEmployee({ id: uuid(), ...inputValues });
+    resetForm();
+    setshowAlert(true);
+    setTimeout(() => {
+        setshowAlert(false);
+    }, 2000);
+};
+
+
+   
+
 
     return (
         <div>
 
             <div className="d-flex my-5 justify-content-between">
                 <button type="button" className="btn btn-outline-secondary" onClick={() => navigate("/")}>Back</button>
-                <h1 className="text-center">{id ? "Edit" : "Add new"} Employee</h1>
+                <h1 className="text-center">{id ? "Edit" : "Add new"} User</h1>
                 <div />
             </div>
 
@@ -97,7 +110,7 @@ export const EmployeeForm = () => {
 
 
                     <div className="d-grid gap-2 mt-3">
-                        <button type="submit" className="btn btn-outline-primary btn-block">{id ? "Edit" : "Add"} Employee</button>
+                        <button type="submit" className="btn btn-outline-primary btn-block">{id ? "Edit" : "Add"} User</button>
                     </div>
                 </form>
             </div>
